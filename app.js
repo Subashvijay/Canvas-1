@@ -14,7 +14,7 @@ var destImg = new Image();
 destImg.src = './assets/destination.svg';
 let agvList = [];
 
-//agvList.push(new Agv(10, 10, 100, 100));
+agvList.push(new Agv(10, 10, 100, 100));
 clickedPos = { x: 0, y: 0 };
 //agvList[0].velocity = 5;
 

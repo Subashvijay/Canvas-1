@@ -72,11 +72,17 @@ function moveToDes() {
     }
 }
 
+let collidedAt = null;
 function moveHoriz(dx, desX) {
     if (dx > 0) {
         let interval = setInterval(() => {
             let x = selectedAgv.x + selectedAgv.velocity;
-            if (selectedAgv.x > desX || selectedObjWithCursor((selectedAgv.x + selectedAgv.w), selectedAgv.y)) {
+            console.log('moving x', x)
+            if (detectCollisionWithWall()) {
+                console.log('collision', x)
+                selectedAgv.x = collidedAt.x - selectedAgv.velocity;
+                clearInterval(interval);
+            } else if (selectedAgv.x > desX) {
                 selectedAgv.x = desX;
                 clearInterval(interval);
             } else {
@@ -87,7 +93,10 @@ function moveHoriz(dx, desX) {
     else {
         let interval = setInterval(() => {
             let x = selectedAgv.x - selectedAgv.velocity;
-            if (selectedAgv.x < desX || selectedObjWithCursor(selectedAgv.x, selectedAgv.y)) {
+            if (detectCollisionWithWall()) {
+                selectedAgv.x = collidedAt.x + selectedAgv.velocity;
+                clearInterval(interval);
+            } else if (selectedAgv.x < desX) {
                 selectedAgv.x = desX;
                 clearInterval(interval)
             } else {
@@ -101,7 +110,12 @@ function moveVer(dy, desY) {
     if (dy > 0) {
         let interval = setInterval(() => {
             let y = selectedAgv.y + selectedAgv.velocity;
-            if (selectedAgv.y > desY || selectedObjWithCursor(selectedAgv.x, selectedAgv.y)) {
+            if (detectCollisionWithWall()) {
+                selectedAgv.y = collidedAt.y - selectedAgv.velocity;
+                clearInterval(interval);
+                return;
+            }
+            if (selectedAgv.y > desY) {
                 selectedAgv.y = desY;
                 clearInterval(interval);
             } else {
@@ -112,7 +126,12 @@ function moveVer(dy, desY) {
     else {
         let interval = setInterval(() => {
             let y = selectedAgv.y - selectedAgv.velocity;
-            if (selectedAgv.y < desY || selectedObjWithCursor(selectedAgv.x, selectedAgv.y)) {
+            if (detectCollisionWithWall()) {
+                selectedAgv.y = collidedAt.y + selectedAgv.velocity;
+                clearInterval(interval);
+                return;
+            }
+            if (selectedAgv.y < desY) {
                 selectedAgv.y = desY;
                 clearInterval(interval);
             } else {
@@ -120,4 +139,23 @@ function moveVer(dy, desY) {
             }
         }, 10);
     }
+}
+
+function detectCollisionWithWall() {
+    let rect1 = selectedAgv;
+    let result = false;
+    objList.forEach(rect2 => {
+        if (rect1.x < rect2.x + rect2.w &&
+            rect1.x + rect1.w > rect2.x &&
+            rect1.y < rect2.y + rect2.h &&
+            rect1.h + rect1.y > rect2.y) {
+            result = true;
+            return true;
+        }
+    });
+    if (result) {
+        console.log('colllide at ', rect1.x);
+        collidedAt = { ...rect1 };
+    }
+    return result;
 }

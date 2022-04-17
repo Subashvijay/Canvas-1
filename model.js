@@ -19,7 +19,7 @@ class Agv {
     }
     x = 10; y = 10; w = 50;
     h = 50; color = 'red';
-    velocity = 10;
+    velocity = 4;
 }
 
 function move(dir, obj) {
