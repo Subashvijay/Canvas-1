@@ -14,7 +14,7 @@ var destImg = new Image();
 destImg.src = './assets/destination.svg';
 let agvList = [];
 
-agvList.push(new Agv(10, 10, 100, 100));
+//agvList.push(new Agv(10, 10, 100, 100));
 clickedPos = { x: 0, y: 0 };
 //agvList[0].velocity = 5;
 
@@ -45,7 +45,7 @@ function mouseUpHandle(e) {
   if (checkWithinCanvas(e)) {
     isdrawResizeRect = false;
     isDrawCord = false;
-    if (rectResize.width != 0 && rectResize.h != 0) {
+    if (rectResize.w != 0 && rectResize.h != 0) {
       objList.push({ ...rectResize });
       rectResize = new WallBlock(0, 0, 0, 0);
     }
@@ -60,25 +60,25 @@ function mouseUpHandle(e) {
 let copiedObj = null;
 function keyDownHandler(e) {
   let obj = selectedObj ? selectedObj : agvList[0]
-  if (obj) {
+  if (obj || copiedObj) {
     if (e.key == "Right" || e.key == "ArrowRight") {
-      obj.move('l');
+      move('l', obj);
     }
     else if (e.key == "Left" || e.key == "ArrowLeft") {
-      obj.move('r');
+      move('r', obj);
     }
     if (e.key == "Up" || e.key == "ArrowUp") {
-      obj.move('t');
+      move('t', obj);
     }
     else if (e.key == "Down" || e.key == "ArrowDown") {
-      obj.move('b');
+      move('b', obj);
     }
 
     if ((e.key == "c" || e.key == "keyC") && e.ctrlKey) {
       copiedObj = { ...selectedObj };
       console.log(copiedObj);
     }
-    console.log(e);
+    // console.log(e);
     if ((e.key == "v" || e.key == "keyV") && e.ctrlKey) {
       if (copiedObj) {
         copiedObj.x = clickedPos.x; copiedObj.y = clickedPos.y;
@@ -114,6 +114,7 @@ function mouseMoveHandle(e) {
     previousMouseE = e;
   }
 }
+
 destPos = null;
 function clickHandler(e) {
   let x = e.offsetX; let y = e.offsetY;
@@ -220,14 +221,36 @@ function highlightSelectedObj() {
   ctx.rect(selectedObj.x, selectedObj.y, selectedObj.w, selectedObj.h);
   // ctx.fill()
   ctx.stroke();
+}
 
+function draw100DGraph() {
+  for (let i = 0; i * 100 < canvasHeight; i++) {
+    ctx.beginPath();
+    ctx.moveTo(0, i * 100);
+    ctx.fillStyle = "black";
+    ctx.font = "13px Arial";
+    ctx.fillText(i * 100, 0, i * 100);
+    ctx.lineTo(canvas.offsetWidth, i * 100);
+    ctx.strokeStyle = "black"
+    ctx.stroke();
+  }
+  for (let j = 0; j * 100 < canvasWidth; j++) {
+    ctx.beginPath();
+    ctx.moveTo(j * 100, 0);
+    ctx.fillStyle = "black";
+    ctx.font = "13px Arial";
+    ctx.fillText(j * 100, j * 100, 10);
+    ctx.lineTo(j * 100, canvas.offsetHeight);
+    ctx.strokeStyle = "black"
+    ctx.stroke();
+  }
 }
 
 showGridLines = true;
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+  draw100DGraph();
   if (showGridLines) {
     //  drawGrid()
     ctx.drawImage(gridImg, 0, 0)

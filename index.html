@@ -22,12 +22,12 @@
         height="850"></canvas> </div>
     <div class="col-3 p-0" style="width: 400px;">
       <h2>drag to create obj</h2>
-      <div class="border mt-2 p-2" style="width: 400px;">
+      <!-- <div class="border mt-2 p-2" style="width: 400px;">
         <label for="objRemove" class="form-label">objId to
           remove:</label>
         <input type="number" class="form-control" id="objRemove" aria-describedby="roomWidth">
         <button onclick="removeObj()" class="btn btn-primary">Submit</button>
-      </div>
+      </div> -->
 
       <!-- Button trigger modal -->
       <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#addObj">
@@ -113,6 +113,7 @@
       </div>
 
       <div class="row mt-3 border py-3" style="width: 400px;">
+        <p>use shift + click to select point in graph</p>
         <div class="col-4 d-flex">
           <label for="" class="form-label">X:</label>
           <input type="number" class="form-control" id="desX">
@@ -125,13 +126,23 @@
           <button type="button" onclick="moveToDes()" class="btn btn-primary">Move</button>
         </div>
       </div>
+      <div class="row  p-2 border my-2">
+        <h5>After seleting Object in graph u can</h5>
+        <ul class="list-group">
+          <li class="list-group-item "> ->use shift + delete to delete object</li>
+          <li class="list-group-item"> ->Ctrl + c to copy and paste using Ctrl + V</li>
+          <li class="list-group-item "> ->Drag to move the object</li>
+          <!-- <li class="list-group-item disabled">Use arrow key minor adjutment</li> -->
 
-      <div class="form-check">
+        </ul>
+      </div>
+
+      <!-- <div class="form-check">
         <label class="form-check-label">
           <input type="checkbox" onclick="setPencilMode()" class="form-check-input" name="" id="" value="checkedValue">
           Pencil Mode
         </label>
-      </div>
+      </div> -->
     </div>
   </div> <!-- <canvas id="canvas" style="border: 1px solid black;" class="ms-5"></canvas> -->
   <script src="model.js"></script>
