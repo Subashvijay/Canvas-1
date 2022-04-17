@@ -108,8 +108,17 @@ function mouseMoveHandle(e) {
     }
 
     if (isDragSelObj && previousMouseE) {
-      selectedObj.x = (e.offsetX - previousMouseE.offsetX) + selectedObj.x;
-      selectedObj.y = (e.offsetY - previousMouseE.offsetY) + selectedObj.y;
+      if (e.ctrlKey) {
+        selectedObj.x = (e.offsetX - previousMouseE.offsetX) + selectedObj.x;
+      }
+      else if (e.shiftKey) {
+        selectedObj.y = (e.offsetY - previousMouseE.offsetY) + selectedObj.y;
+      }
+      else {
+        selectedObj.x = (e.offsetX - previousMouseE.offsetX) + selectedObj.x;
+        selectedObj.y = (e.offsetY - previousMouseE.offsetY) + selectedObj.y;
+      }
+
     }
     previousMouseE = e;
   }
@@ -120,15 +129,26 @@ function clickHandler(e) {
   let x = e.offsetX; let y = e.offsetY;
   selectedObj = null;
   clickedPos = { x, y };
-  if (e.shiftKey) {
+  if (e.altKey) {
     document.getElementById("desX").value = x;
     document.getElementById("desY").value = y;
     destPos = { x, y };
   }
-  selectedObj = collidedWithObj(x, y);
+  selectedObj = selectedObjWithCursor(x, y);
+  selectedAgv = selectedAGVWithCursor(x, y)
 }
 
-function collidedWithObj(x, y) {
+function selectedAGVWithCursor(x, y) {
+  let result = null;
+  agvList.forEach((o, i) => {
+    if (x > o.x && x < (o.x + o.w) && y < (o.y + o.h) && y > o.y) {
+      result = o;
+      // document.getElementById("objRemove").value = i;
+    }
+  });
+  return result;
+}
+function selectedObjWithCursor(x, y) {
   let result = null;
   objList.forEach((o, i) => {
     if (x > o.x && x < (o.x + o.w) && y < (o.y + o.h) && y > o.y) {
@@ -223,6 +243,15 @@ function highlightSelectedObj() {
   ctx.stroke();
 }
 
+function highlightSelectedAGV() {
+  ctx.beginPath();
+  ctx.strokeStyle = "black";
+  ctx.rect(selectedAgv.x, selectedAgv.y, selectedAgv.w, selectedAgv.h);
+  // ctx.fill()
+  ctx.stroke();
+}
+
+
 function draw100DGraph() {
   for (let i = 0; i * 100 < canvasHeight; i++) {
     ctx.beginPath();
@@ -270,7 +299,10 @@ function draw() {
     highlightSelectedObj();
     drawCordinate(selectedObj.x + selectedObj.w, selectedObj.y + selectedObj.h)
     drawCordinate(selectedObj.x, selectedObj.y)
+  }
 
+  if (selectedAgv) {
+    highlightSelectedAGV();
   }
 
 

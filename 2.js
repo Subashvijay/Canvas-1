@@ -28,7 +28,10 @@ function addAGV() {
 
 let selectedAgv = null;
 function moveToDes() {
-    selectedAgv = agvList[0];
+    if (!selectedAgv) {
+        return;
+    }
+    //selectedAgv = agvList[0];
     let desX = +document.getElementById("desX").value;
     let desY = +document.getElementById("desY").value;
     let SourX = selectedAgv.x;
@@ -73,7 +76,7 @@ function moveHoriz(dx, desX) {
     if (dx > 0) {
         let interval = setInterval(() => {
             let x = selectedAgv.x + selectedAgv.velocity;
-            if (selectedAgv.x > desX || collidedWithObj((selectedAgv.x + selectedAgv.w), selectedAgv.y)) {
+            if (selectedAgv.x > desX || selectedObjWithCursor((selectedAgv.x + selectedAgv.w), selectedAgv.y)) {
                 selectedAgv.x = desX;
                 clearInterval(interval);
             } else {
@@ -84,7 +87,7 @@ function moveHoriz(dx, desX) {
     else {
         let interval = setInterval(() => {
             let x = selectedAgv.x - selectedAgv.velocity;
-            if (selectedAgv.x < desX || collidedWithObj(selectedAgv.x, selectedAgv.y)) {
+            if (selectedAgv.x < desX || selectedObjWithCursor(selectedAgv.x, selectedAgv.y)) {
                 selectedAgv.x = desX;
                 clearInterval(interval)
             } else {
@@ -98,7 +101,7 @@ function moveVer(dy, desY) {
     if (dy > 0) {
         let interval = setInterval(() => {
             let y = selectedAgv.y + selectedAgv.velocity;
-            if (selectedAgv.y > desY || collidedWithObj(selectedAgv.x, selectedAgv.y)) {
+            if (selectedAgv.y > desY || selectedObjWithCursor(selectedAgv.x, selectedAgv.y)) {
                 selectedAgv.y = desY;
                 clearInterval(interval);
             } else {
@@ -109,7 +112,7 @@ function moveVer(dy, desY) {
     else {
         let interval = setInterval(() => {
             let y = selectedAgv.y - selectedAgv.velocity;
-            if (selectedAgv.y < desY || collidedWithObj(selectedAgv.x, selectedAgv.y)) {
+            if (selectedAgv.y < desY || selectedObjWithCursor(selectedAgv.x, selectedAgv.y)) {
                 selectedAgv.y = desY;
                 clearInterval(interval);
             } else {
