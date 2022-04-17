@@ -44,7 +44,7 @@ class Agv extends obj {
         this.x = x; this.y = y; this.w = w; this.h = h;
     }
     x = 10; y = 10; w = 50;
-    h = 50; color = 'red';
+    h = 50; color = '#fb8c00';
     velocity = 10;
 
 

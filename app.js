@@ -8,8 +8,10 @@ let isDrawCord = false;
 let objList = [];
 let selectedObj = null;
 let isPencilMode = false;
-var img = new Image();
-img.src = './grid.svg';
+var gridImg = new Image();
+gridImg.src = './assets/grid.svg';
+var destImg = new Image();
+destImg.src = './assets/destination.svg';
 let agvList = [];
 
 agvList.push(new Agv(10, 10, 100, 100));
@@ -83,6 +85,11 @@ function keyDownHandler(e) {
         objList.push({ ...copiedObj });
       }
     }
+    if ((e.key == "Delete") && e.shiftKey) {
+      let index = objList.findIndex(o => o.x == selectedObj.x && o.y == selectedObj.y);
+      objList.splice(index, 1);
+      selectedObj = null;
+    }
   }
 }
 
@@ -107,11 +114,16 @@ function mouseMoveHandle(e) {
     previousMouseE = e;
   }
 }
-
+destPos = null;
 function clickHandler(e) {
   let x = e.offsetX; let y = e.offsetY;
   selectedObj = null;
   clickedPos = { x, y };
+  if (e.shiftKey) {
+    document.getElementById("desX").value = x;
+    document.getElementById("desY").value = y;
+    destPos = { x, y };
+  }
   selectedObj = collidedWithObj(x, y);
 }
 
@@ -212,12 +224,13 @@ function highlightSelectedObj() {
 }
 
 showGridLines = true;
+
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   if (showGridLines) {
     //  drawGrid()
-    ctx.drawImage(img, 0, 0)
+    ctx.drawImage(gridImg, 0, 0)
   }
 
   if (isdrawResizeRect) {
@@ -240,6 +253,10 @@ function draw() {
 
   if (isDrawCord && !selectedObj) {
     drawCordinate(clickMOuseObj.offsetX, clickMOuseObj.offsetY);
+  }
+
+  if (destPos) {
+    ctx.drawImage(destImg, destPos.x - 14, destPos.y - 40, 30, 40)
   }
 
 }
